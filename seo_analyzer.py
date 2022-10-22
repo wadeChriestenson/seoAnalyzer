@@ -11,12 +11,14 @@ soup = BeautifulSoup(page.content, "html.parser")
 
 
 def meta_tag(web_site):
+    site_name = web_site.find('meta', property='og:site_name')
     metaTag = web_site.find("meta", property='og:description')
+    print('Results from SEO analyzer scan: \n ***', site_name['content'], '***')
     print(metaTag["content"] if metaTag else "No meta title given")
     print('Meta tag character count:', len(metaTag['content']))
 
 
-def all_tags(web_site, ):
+def h_tags(web_site):
     h1 = web_site.find_all("h1")
     h2 = web_site.find_all("h2")
     h3 = web_site.find_all("h3")
@@ -34,15 +36,17 @@ def all_tags(web_site, ):
 
 
 def word_count(web_site):
-    words = web_site.text.split()
+    capital = web_site.text.capitalize()
+    words = capital.split()
     print('and has', len(words), 'total words.')
     word_freq = set(words)
     print('Keywords on page:')
     for key_words in word_freq:
-        print(key_words, '-', words.count(key_words))
+        if key_words.isalpha() and words.count(key_words) > 5 and len(key_words) > 5:
+            print(key_words.capitalize(), '-', words.count(key_words))
     return
 
 
 meta_tag(soup)
-all_tags(soup)
+h_tags(soup)
 word_count(soup)
