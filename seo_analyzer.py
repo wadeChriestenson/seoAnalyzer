@@ -6,14 +6,14 @@ user_choice = input('Enter name of website to scan \n')
 # URL = "https://w3schools.com/"
 URL = 'https://' + user_choice
 page = requests.get(URL)
-print(page.text)
+# print(page.text)
 soup = BeautifulSoup(page.content, "html.parser")
 
 
-def meta_tag(web_site, site_name):
-    metaTag = web_site.find("meta")
-    print(site_name)
+def meta_tag(web_site):
+    metaTag = web_site.find("meta", property='og:description')
     print(metaTag["content"] if metaTag else "No meta title given")
+    print('Meta tag character count:', len(metaTag['content']))
 
 
 def all_tags(web_site, ):
@@ -36,9 +36,13 @@ def all_tags(web_site, ):
 def word_count(web_site):
     words = web_site.text.split()
     print('and has', len(words), 'total words.')
+    word_freq = set(words)
+    print('Keywords on page:')
+    for key_words in word_freq:
+        print(key_words, '-', words.count(key_words))
     return
 
 
-meta_tag(soup, URL)
+meta_tag(soup)
 all_tags(soup)
 word_count(soup)
